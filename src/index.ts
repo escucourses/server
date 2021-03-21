@@ -11,6 +11,7 @@ import { errorHandler } from './middlewares/error-handler';
 
 // Routes
 import { IndexRoutes } from './routes/index-routes';
+import { AuthRoutes } from './routes/auth-routes';
 
 // Errors
 import { NotFoundError } from './errors/not-found-error';
@@ -22,6 +23,7 @@ createConnection()
 
     // Routes initialization
     const indexRoutes = new IndexRoutes();
+    const authRoutes = new AuthRoutes();
 
     // Before Middlewares
     app.use(helmet());
@@ -29,6 +31,7 @@ createConnection()
 
     // Routes registration
     app.use(indexRoutes.uri, indexRoutes.router);
+    app.use(authRoutes.uri, authRoutes.router);
 
     app.all('*', () => {
       throw new NotFoundError();
