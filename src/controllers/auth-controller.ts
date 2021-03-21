@@ -58,6 +58,7 @@ export class AuthController {
     user.password = password;
 
     await user.save();
+    delete user.password;
 
     return res.status(201).send(user);
   }
