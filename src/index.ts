@@ -6,6 +6,9 @@ import * as express from 'express';
 import * as helmet from 'helmet';
 import { json } from 'body-parser';
 
+// Internal dependencies
+import { environmentValidation } from './config/environment-validation';
+
 // Middlewares
 import { errorHandler } from './middlewares/error-handler';
 
@@ -20,6 +23,7 @@ createConnection()
   .then(async (connection) => {
     const app = express();
     const port = process.env.PORT || 3000;
+    environmentValidation;
 
     // Routes initialization
     const indexRoutes = new IndexRoutes();
