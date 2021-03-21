@@ -1,13 +1,16 @@
 // Libraries
 import 'reflect-metadata';
 import 'express-async-errors';
-import { createConnection } from 'typeorm';
+import { createConnection, Index } from 'typeorm';
 import * as express from 'express';
 import * as helmet from 'helmet';
 import { json } from 'body-parser';
 
 // Middlewares
 import { errorHandler } from './middlewares/error-handler';
+
+// Routes
+import { IndexRoutes } from './routes/index-routes';
 
 // Errors
 import { NotFoundError } from './errors/not-found-error';
@@ -17,13 +20,15 @@ createConnection()
     const app = express();
     const port = process.env.PORT || 3000;
 
+    // Routes initialization
+    const indexRoutes = new IndexRoutes();
+
     // Before Middlewares
     app.use(helmet());
     app.use(json());
 
-    app.get('/', (req, res) => {
-      res.send({ message: 'Test route!' });
-    });
+    // Routes registration
+    app.use(indexRoutes.uri, indexRoutes.router);
 
     app.all('*', () => {
       throw new NotFoundError();
