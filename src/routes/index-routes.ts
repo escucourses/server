@@ -1,13 +1,9 @@
-// Libraries
-import { Router } from 'express';
-
 // Internal dependencies
 import { BaseRoute } from './base-route';
 import { IndexController } from '../controllers/index-controller';
 
-export class IndexRoutes extends BaseRoute {
+export class IndexRoutes extends BaseRoute<IndexController> {
   uri = '';
-  protected controller: IndexController;
 
   constructor() {
     super(IndexController);

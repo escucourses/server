@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
-export abstract class BaseRoute {
+export abstract class BaseRoute<Controller> {
   public router: Router;
   public uri: string;
-  protected controller: any;
+  protected controller: Controller;
 
   constructor(Controller) {
     this.router = Router();

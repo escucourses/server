@@ -1,7 +1,7 @@
 // Libraries
 import 'reflect-metadata';
 import 'express-async-errors';
-import { createConnection, Index } from 'typeorm';
+import { createConnection } from 'typeorm';
 import * as express from 'express';
 import * as helmet from 'helmet';
 import { json } from 'body-parser';
