@@ -1,6 +1,10 @@
 // Libraries
 import { Request, Response } from 'express';
 import { body, ValidationChain } from 'express-validator';
+import * as jwt from 'jsonwebtoken';
+
+// Constants
+import { environment } from '../config/environment';
 
 // Errors
 import { BadRequestError } from '../errors/bad-request-error';
@@ -59,6 +63,11 @@ export class AuthController {
 
     await user.save();
     delete user.password;
+
+    user.token = jwt.sign(
+      { id: user.id, exp: Math.floor(Date.now() / 1000) + 60 * 60 },
+      environment.jwtSecret
+    );
 
     return res.status(201).send(user);
   }

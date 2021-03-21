@@ -37,6 +37,9 @@ export class User extends BaseEntity {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
+  // jsonwebtoken
+  token: string;
+
   @BeforeInsert()
   @BeforeUpdate()
   protected async hashPassword() {
