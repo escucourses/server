@@ -14,6 +14,7 @@ export class AuthRoutes extends BaseRoute<AuthController> {
 
   public config(): void {
     this.signup();
+    this.signin();
   }
 
   public signup() {
@@ -21,7 +22,16 @@ export class AuthRoutes extends BaseRoute<AuthController> {
       '/signup',
       this.controller.signupValidations,
       validateRequest,
-      this.controller.signup
+      (req, res) => this.controller.signup(req, res)
+    );
+  }
+
+  public signin() {
+    this.router.post(
+      '/signin',
+      this.controller.signinValidations,
+      validateRequest,
+      (req, res) => this.controller.signin(req, res)
     );
   }
 }
