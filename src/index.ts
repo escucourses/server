@@ -5,9 +5,11 @@ import { createConnection } from 'typeorm';
 import * as express from 'express';
 import * as helmet from 'helmet';
 import { json } from 'body-parser';
+import * as swaggerUI from 'swagger-ui-express';
 
 // Internal dependencies
 import { environmentValidation } from './config/environment-validation';
+import { swaggerDefinition } from './docs/swagger';
 
 // Middlewares
 import { errorHandler } from './middlewares/error-handler';
@@ -36,6 +38,9 @@ createConnection()
     // Routes registration
     app.use(indexRoutes.uri, indexRoutes.router);
     app.use(authRoutes.uri, authRoutes.router);
+
+    // Documentation
+    app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDefinition));
 
     app.all('*', () => {
       throw new NotFoundError();

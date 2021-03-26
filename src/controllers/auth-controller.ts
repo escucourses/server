@@ -20,10 +20,10 @@ export class AuthController {
 
   constructor() {
     this.signupValidations = [
-      body('first_name')
+      body('firstName')
         .isLength({ min: 2 })
         .withMessage('First name must have a minimum of 2 characters'),
-      body('last_name')
+      body('lastName')
         .isLength({ min: 2 })
         .withMessage('Last name must have a minimum of 2 characters'),
       body('birthday')
@@ -61,13 +61,7 @@ export class AuthController {
    * @return { Promise<Response> }
    */
   public async signup(req: Request, res: Response): Promise<Response> {
-    const {
-      first_name: firstName,
-      last_name: lastName,
-      birthday,
-      email,
-      password,
-    } = req.body;
+    const { firstName, lastName, birthday, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
 
