@@ -9,7 +9,7 @@ import * as swaggerUI from 'swagger-ui-express';
 
 // Internal dependencies
 import { environmentValidation } from './config/environment-validation';
-import { swaggerDefinition } from './docs/swagger';
+import { swaggerDefinition } from '../docs/swagger';
 
 // Middlewares
 import { errorHandler } from './middlewares/error-handler';
