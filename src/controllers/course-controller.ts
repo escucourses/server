@@ -2,9 +2,6 @@
 import { Request, Response } from 'express';
 import { body, param, ValidationChain } from 'express-validator';
 
-// Constants
-import { environment } from '../config/environment';
-
 // Errors
 import { DatabaseError } from '../errors/database-error';
 import { ModelNotFoundError } from '../errors/model-not-found-error';
