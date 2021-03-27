@@ -7,15 +7,16 @@ import {
   BeforeUpdate,
   UpdateDateColumn,
   CreateDateColumn,
-  BaseEntity,
   OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
+// Internal dependencies
+import { BaseModel } from './base-model';
 import { Course } from './course';
 
 @Entity()
-export class User extends BaseEntity {
+export class User extends BaseModel<User> {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -52,5 +53,9 @@ export class User extends BaseEntity {
     if (typeof this.password !== 'undefined') {
       this.password = await bcrypt.hash(this.password, 8);
     }
+  }
+
+  getProtectedProperties(): string[] {
+    return [...this.getAuditProperties()];
   }
 }

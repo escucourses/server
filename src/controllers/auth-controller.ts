@@ -61,7 +61,7 @@ export class AuthController {
    * @return { Promise<Response> }
    */
   public async signup(req: Request, res: Response): Promise<Response> {
-    const { firstName, lastName, birthday, email, password } = req.body;
+    const { email } = req.body;
 
     const existingUser = await User.findOne({ email });
 
@@ -71,11 +71,7 @@ export class AuthController {
 
     const user = new User();
 
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.birthday = birthday;
-    user.email = email;
-    user.password = password;
+    user.setPropertiesFromObject(req.body);
 
     await user.save();
     delete user.password;
