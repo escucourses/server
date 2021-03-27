@@ -91,9 +91,7 @@ export class CourseController {
         where: { id: req.params.id, isPrivate: false },
       });
     } catch (error) {
-      throw new ModelNotFoundError(
-        `No Course with id ${req.params.id} was found`
-      );
+      throw new ModelNotFoundError(Course.getNotFoundMessage());
     }
 
     return res.send(course);
