@@ -8,8 +8,11 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   BaseEntity,
+  OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+
+import { Course } from './course';
 
 @Entity()
 export class User extends BaseEntity {
@@ -39,6 +42,9 @@ export class User extends BaseEntity {
 
   // jsonwebtoken
   token: string;
+
+  @OneToMany(() => Course, (course) => course.createdBy)
+  createdCourses: Course[];
 
   @BeforeInsert()
   @BeforeUpdate()

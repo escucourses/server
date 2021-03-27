@@ -12,14 +12,16 @@ import { environmentValidation } from './config/environment-validation';
 import { swaggerDefinition } from './docs/swagger';
 
 // Middlewares
+import { validateAuthentication } from './middlewares/validate-authentication';
 import { errorHandler } from './middlewares/error-handler';
+
+// Errors
+import { NotFoundError } from './errors/not-found-error';
 
 // Routes
 import { IndexRoutes } from './routes/index-routes';
 import { AuthRoutes } from './routes/auth-routes';
-
-// Errors
-import { NotFoundError } from './errors/not-found-error';
+import { CourseRoutes } from './routes/course-routes';
 
 createConnection()
   .then(async (connection) => {
@@ -30,17 +32,21 @@ createConnection()
     // Routes initialization
     const indexRoutes = new IndexRoutes();
     const authRoutes = new AuthRoutes();
+    const courseRoutes = new CourseRoutes();
 
     // Before Middlewares
     app.use(helmet());
     app.use(json());
 
-    // Routes registration
+    // Not required Authentication routes
     app.use(indexRoutes.uri, indexRoutes.router);
     app.use(authRoutes.uri, authRoutes.router);
 
     // Documentation
     app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDefinition));
+
+    // Authentication Required routes
+    app.use(courseRoutes.uri, validateAuthentication, courseRoutes.router);
 
     app.all('*', () => {
       throw new NotFoundError();

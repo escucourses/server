@@ -7,7 +7,8 @@
     "outDir": "./dist",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "typeRoots": ["./types"]
   },
   "include": ["src"],
   "exclude": ["node_modules", "tests"]
