@@ -41,8 +41,8 @@
     "typeorm": "0.2.31"
   },
   "scripts": {
-    "start": "node dist/index.js | pino-logflare --key KEY --source SOURCE",
-    "dev": "ts-node-dev src/index.ts | pino-logflare --key KEY --source SOURCE",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev src/index.ts",
     "lint": "eslint \"src/**/*.ts\" --quiet --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "build": "tsc",
