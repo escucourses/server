@@ -35,7 +35,6 @@
     "moment": "^2.29.1",
     "mysql": "^2.14.1",
     "pino": "^6.11.2",
-    "pino-logflare": "^0.3.8",
     "reflect-metadata": "^0.1.10",
     "swagger-ui-express": "^4.1.6",
     "typeorm": "0.2.31"
