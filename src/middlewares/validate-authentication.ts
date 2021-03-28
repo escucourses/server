@@ -13,6 +13,9 @@ import { ModelNotFoundError } from '../errors/model-not-found-error';
 // Models
 import { User } from '../models/user';
 
+// Internal dependencies
+import { logger } from '../config/logger';
+
 const verifyToken = promisify(jwt.verify);
 
 interface Payload {
@@ -41,12 +44,20 @@ export const validateAuthentication = async (
       environment.jwtSecret
     )) as Payload;
   } catch (error) {
+    logger.info(
+      `VALIDATE-AUTHENTICATION-MIDDLEWARE__DECODING-JWT-ERROR — ${error}`
+    );
+
     throw new AuthenticationError();
   }
 
   try {
     req.user = await User.findOneOrFail(decodedPayload.id);
   } catch (error) {
+    logger.warn(
+      `VALIDATE-AUTHENTICATION-MIDDLEWARE__FETCHING-REQUEST-USER-ERROR — ${error}`
+    );
+
     throw new ModelNotFoundError(
       'The user given in the token no longer exists'
     );

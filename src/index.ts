@@ -10,6 +10,7 @@ import * as swaggerUI from 'swagger-ui-express';
 // Internal dependencies
 import { environmentValidation } from './config/environment-validation';
 import { swaggerDefinition } from './docs/swagger';
+import { logger } from './config/logger';
 
 // Middlewares
 import { validateAuthentication } from './middlewares/validate-authentication';
@@ -56,7 +57,7 @@ createConnection()
     app.use(errorHandler);
 
     app.listen(port, () => {
-      console.log(`Listening on port ${port}`);
+      logger.info(`Application started on port ${port}`);
     });
   })
-  .catch((error) => console.log(error));
+  .catch((error) => logger.error(`APPLICATION-START-ERROR — ${error}`));

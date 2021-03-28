@@ -9,6 +9,9 @@ import { ModelNotFoundError } from '../errors/model-not-found-error';
 // Models
 import { Course } from '../models/course';
 
+// Internal dependencies
+import { logger } from '../config/logger';
+
 export class CourseController {
   public createValidations: ValidationChain[];
   public singleResourceValidations: ValidationChain[];
@@ -75,7 +78,15 @@ export class CourseController {
    * @return { Promise<Response> }
    */
   public async index(req: Request, res: Response): Promise<Response> {
-    const courses = await Course.find({ where: { isPrivate: false } });
+    let courses: Course[];
+
+    try {
+      courses = await Course.find({ where: { isPrivate: false } });
+    } catch (error) {
+      logger.error('COURSE-CONTROLLER.INDEX__DATABASE-ERROR', error);
+
+      throw new DatabaseError();
+    }
 
     return res.send(courses);
   }
@@ -97,7 +108,8 @@ export class CourseController {
     try {
       await course.save();
     } catch (error) {
-      console.log(error);
+      logger.error(`COURSE-CONTROLLER.CREATE__DATABASE-ERROR — ${error}`);
+
       throw new DatabaseError();
     }
 
@@ -120,6 +132,8 @@ export class CourseController {
         where: { id: req.params.id, isPrivate: false },
       });
     } catch (error) {
+      logger.info(`COURSE-CONTROLLER.SHOW__MODEL-NOT-FOUND-ERROR — ${error}`);
+
       throw new ModelNotFoundError(Course.getNotFoundMessage());
     }
 
@@ -142,6 +156,8 @@ export class CourseController {
         where: { id: req.params.id, isPrivate: false },
       });
     } catch (error) {
+      logger.info(`COURSE-CONTROLLER.UPDATE__MODEL-NOT-FOUND-ERROR — ${error}`);
+
       throw new ModelNotFoundError(Course.getNotFoundMessage());
     }
 
@@ -151,6 +167,8 @@ export class CourseController {
     try {
       await course.save();
     } catch (error) {
+      logger.error(`COURSE-CONTROLLER.UPDATE__DATABASE-ERROR — ${error}`);
+
       throw new DatabaseError();
     }
 
@@ -171,12 +189,16 @@ export class CourseController {
     try {
       course = await Course.findOneOrFail(req.params.id);
     } catch (error) {
+      logger.info(`COURSE-CONTROLLER.DELETE__MODEL-NOT-FOUND-ERROR — ${error}`);
+
       throw new ModelNotFoundError(Course.getNotFoundMessage());
     }
 
     try {
       await course.remove();
     } catch (error) {
+      logger.error(`COURSE-CONTROLLER.DELETE__DATABASE-ERROR — ${error}`);
+
       throw new DatabaseError();
     }
 
