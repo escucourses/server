@@ -46,6 +46,7 @@ export class CourseRoutes extends BaseRoute<CourseController> {
     this.router.patch(
       '/:id',
       this.controller.singleResourceValidations,
+      this.controller.updateValidations,
       validateRequest,
       (req, res) => this.controller.update(req, res)
     );

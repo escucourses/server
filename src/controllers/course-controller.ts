@@ -12,6 +12,7 @@ import { Course } from '../models/course';
 export class CourseController {
   public createValidations: ValidationChain[];
   public singleResourceValidations: ValidationChain[];
+  public updateValidations: ValidationChain[];
 
   constructor() {
     this.createValidations = [
@@ -21,8 +22,12 @@ export class CourseController {
       body('summary')
         .isLength({ min: 2 })
         .withMessage('Must have a minimum of 2 characters'),
-      body('topics').notEmpty().withMessage('Topics is required'),
-      body('requirements').notEmpty().withMessage("Can't be empty"),
+      body('topics')
+        .isLength({ min: 2 })
+        .withMessage('Must have a minimum of 2 characters'),
+      body('requirements')
+        .isLength({ min: 2 })
+        .withMessage('Must have a minimum of 2 characters'),
       body('description')
         .isLength({ min: 10 })
         .withMessage('Must have a minimum of 10 characters'),
@@ -31,6 +36,33 @@ export class CourseController {
 
     this.singleResourceValidations = [
       param('id').isNumeric().withMessage('Must be a number'),
+    ];
+
+    this.updateValidations = [
+      body('name')
+        .optional()
+        .isLength({ min: 2 })
+        .withMessage('Must have a minimum of 2 characters'),
+      body('summary')
+        .optional()
+        .isLength({ min: 2 })
+        .withMessage('Must have a minimum of 2 characters'),
+      body('topics')
+        .optional()
+        .isLength({ min: 2 })
+        .withMessage('Must have a minimum of 2 characters'),
+      body('requirements')
+        .optional()
+        .isLength({ min: 2 })
+        .withMessage('Must have a minimum of 2 characters'),
+      body('description')
+        .optional()
+        .isLength({ min: 10 })
+        .withMessage('Must have a minimum of 10 characters'),
+      body('price')
+        .optional()
+        .isFloat()
+        .withMessage('Must be a number (float)'),
     ];
   }
 
