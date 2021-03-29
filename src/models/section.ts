@@ -7,42 +7,32 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
-  OneToMany,
+  Unique,
 } from 'typeorm';
 
 // Internal dependencies
 import { BaseModel } from './base-model';
-import { Section } from './section';
 import { User } from './user';
+import { Course } from './course';
 
 @Entity()
-export class Course extends BaseModel<Course> {
+@Unique(['courseId', 'order'])
+export class Section extends BaseModel<Section> {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @ManyToOne(() => Course, (course) => course.sections)
+  @JoinColumn({ name: 'course_id' })
+  course: Course;
+
+  @Column({ type: 'int', nullable: false, name: 'course_id' })
+  courseId: number;
 
   @Column({ nullable: false })
   name: string;
 
   @Column({ nullable: false })
-  summary: string;
-
-  @Column({ nullable: false, type: 'text' })
-  topics: string;
-
-  @Column({ nullable: false, type: 'text' })
-  requirements: string;
-
-  @Column({ type: 'text', nullable: false })
-  description: string;
-
-  @Column({ type: 'decimal', precision: 8, scale: 2 })
-  price: number;
-
-  @Column({ type: 'decimal', precision: 6, scale: 2, default: 0 })
-  duration: number;
-
-  @Column({ name: 'is_private', default: true })
-  isPrivate: boolean;
+  order: number;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
@@ -50,22 +40,19 @@ export class Course extends BaseModel<Course> {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.createdCourses)
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'created_by' })
   creator: User;
 
   @Column({ type: 'int', nullable: false, name: 'created_by' })
   createdBy: number;
 
-  @ManyToOne(() => User, (user) => user.createdCourses)
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'updated_by' })
   updater: User;
 
   @Column({ type: 'int', nullable: false, name: 'updated_by' })
   updatedBy: number;
-
-  @OneToMany(() => Section, (section) => section.course)
-  sections: Section[];
 
   getProtectedProperties(): string[] {
     return [...this.getAuditProperties()];

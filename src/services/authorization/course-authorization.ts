@@ -3,7 +3,6 @@ import { Authorization } from './authorization';
 
 // Models
 import { Course } from '../../models/course';
-import { User } from '../../models/user';
 
 export class CourseAuthorization extends Authorization<Course> {
   /**
@@ -14,7 +13,7 @@ export class CourseAuthorization extends Authorization<Course> {
    * @return { boolean }
    */
   public update(course: Course): boolean {
-    return this.user.id === (course.createdBy as User).id;
+    return this.user.id === course.createdBy;
   }
 
   /**
@@ -25,6 +24,6 @@ export class CourseAuthorization extends Authorization<Course> {
    * @return { boolean }
    */
   public delete(course: Course): boolean {
-    return this.user.id === (course.createdBy as User).id;
+    return this.user.id === course.createdBy;
   }
 }
