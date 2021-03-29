@@ -96,17 +96,19 @@ export class AuthController {
     try {
       user = await User.findOneOrFail({ email });
     } catch (error) {
-      throw new ModelNotFoundError(
-        "The given credentials doesn't match our records"
-      );
+      throw new ModelNotFoundError({
+        message: "The given credentials doesn't match our records",
+        file: 'AUTH-CONTROLLER.SIGNIN',
+      });
     }
 
     const arePasswordsEqual = await bcrypt.compare(password, user.password);
 
     if (!arePasswordsEqual) {
-      throw new ModelNotFoundError(
-        "The given credentials doesn't match our records"
-      );
+      throw new ModelNotFoundError({
+        message: "The given credentials doesn't match our records",
+        file: 'AUTH-CONTROLLER.SIGNIN',
+      });
     }
 
     delete user.password;
