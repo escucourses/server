@@ -53,14 +53,14 @@ export class Course extends BaseModel<Course> {
     eager: true,
   })
   @JoinColumn({ name: 'created_by' })
-  createdBy: number;
+  createdBy: User | number;
 
   @ManyToOne(() => User, (user) => user.createdCourses, {
     nullable: false,
     eager: true,
   })
   @JoinColumn({ name: 'updated_by' })
-  updatedBy: number;
+  updatedBy: User | number;
 
   getProtectedProperties(): string[] {
     return [...this.getAuditProperties()];
