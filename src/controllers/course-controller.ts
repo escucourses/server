@@ -5,19 +5,24 @@ import { body, param, ValidationChain } from 'express-validator';
 // Errors
 import { DatabaseError } from '../errors/database-error';
 import { ModelNotFoundError } from '../errors/model-not-found-error';
+import { NotAuthorizedError } from '../errors/not-authorized-error';
 
 // Models
 import { Course } from '../models/course';
 
 // Internal dependencies
+import { CourseAuthorization } from '../services/authorization/course-authorization';
 import { logger } from '../config/logger';
 
 export class CourseController {
   public createValidations: ValidationChain[];
   public singleResourceValidations: ValidationChain[];
   public updateValidations: ValidationChain[];
+  public authorization: CourseAuthorization;
 
   constructor() {
+    this.authorization = new CourseAuthorization();
+
     this.createValidations = [
       body('name')
         .isLength({ min: 2 })
@@ -161,6 +166,10 @@ export class CourseController {
       throw new ModelNotFoundError(Course.getNotFoundMessage());
     }
 
+    if (!this.authorization.setUser(req.user).can(course, 'update')) {
+      throw new NotAuthorizedError();
+    }
+
     course.setPropertiesFromObject(req.body);
     course.updatedBy = req.user.id;
 
@@ -192,6 +201,10 @@ export class CourseController {
       logger.info(`COURSE-CONTROLLER.DELETE__MODEL-NOT-FOUND-ERROR — ${error}`);
 
       throw new ModelNotFoundError(Course.getNotFoundMessage());
+    }
+
+    if (!this.authorization.setUser(req.user).can(course, 'delete')) {
+      throw new NotAuthorizedError();
     }
 
     try {
