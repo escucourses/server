@@ -54,13 +54,12 @@ export const validateAuthentication = async (
   try {
     req.user = await User.findOneOrFail(decodedPayload.id);
   } catch (error) {
-    logger.warn(
-      `VALIDATE-AUTHENTICATION-MIDDLEWARE__FETCHING-REQUEST-USER-ERROR — ${error}`
-    );
-
-    throw new ModelNotFoundError(
-      'The user given in the token no longer exists'
-    );
+    throw new ModelNotFoundError({
+      message: 'The user given in the token no longer exists',
+      file: 'VALIDATE-AUTHENTICATION-MIDDLEWARE',
+      originalError: error,
+      triggeredByUser: decodedPayload.id,
+    });
   }
 
   next();

@@ -88,9 +88,11 @@ export class CourseController {
     try {
       courses = await Course.find({ where: { isPrivate: false } });
     } catch (error) {
-      logger.error('COURSE-CONTROLLER.INDEX__DATABASE-ERROR', error);
-
-      throw new DatabaseError();
+      throw new DatabaseError({
+        file: 'COURSE-CONTROLLER.INDEX',
+        originalError: error,
+        triggeredByUser: req.user.id,
+      });
     }
 
     return res.send(courses);
@@ -113,9 +115,11 @@ export class CourseController {
     try {
       await course.save();
     } catch (error) {
-      logger.error(`COURSE-CONTROLLER.CREATE__DATABASE-ERROR — ${error}`);
-
-      throw new DatabaseError();
+      throw new DatabaseError({
+        file: 'COURSE-CONTROLLER.CREATE',
+        originalError: error,
+        triggeredByUser: req.user.id,
+      });
     }
 
     return res.status(201).send(course);
@@ -182,9 +186,11 @@ export class CourseController {
     try {
       await course.save();
     } catch (error) {
-      logger.error(`COURSE-CONTROLLER.UPDATE__DATABASE-ERROR — ${error}`);
-
-      throw new DatabaseError();
+      throw new DatabaseError({
+        file: 'COURSE-CONTROLLER.UPDATE',
+        originalError: error,
+        triggeredByUser: req.user.id,
+      });
     }
 
     return res.send(course);
@@ -219,9 +225,11 @@ export class CourseController {
     try {
       await course.remove();
     } catch (error) {
-      logger.error(`COURSE-CONTROLLER.DELETE__DATABASE-ERROR — ${error}`);
-
-      throw new DatabaseError();
+      throw new DatabaseError({
+        file: 'COURSE-CONTROLLER.DELETE',
+        originalError: error,
+        triggeredByUser: req.user.id,
+      });
     }
 
     return res.send(course);

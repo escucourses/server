@@ -14,6 +14,6 @@ export class ModelNotFoundError extends CustomError {
   serializeErrors() {
     logger.info(this.errorBody);
 
-    return [{ message: this.errorBody.message }];
+    return [{ message: this.message }];
   }
 }
