@@ -66,7 +66,7 @@ export class AuthController {
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      throw new BadRequestError('Email in use');
+      throw new BadRequestError({ message: 'Email in use' });
     }
 
     const user = new User();
