@@ -1,15 +1,19 @@
-import { CustomError } from './custom-error';
+// Internal dependencies
+import { CustomError, ErrorBody } from './custom-error';
+import { logger } from '../config/logger';
 
 export class ModelNotFoundError extends CustomError {
   statusCode = 404;
 
-  constructor(public message: string) {
-    super(message);
+  constructor(public errorBody: ErrorBody) {
+    super(errorBody.message);
 
     Object.setPrototypeOf(this, ModelNotFoundError.prototype);
   }
 
   serializeErrors() {
-    return [{ message: this.message }];
+    logger.info(this.errorBody);
+
+    return [{ message: this.errorBody.message }];
   }
 }

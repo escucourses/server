@@ -137,9 +137,12 @@ export class CourseController {
         where: { id: req.params.id, isPrivate: false },
       });
     } catch (error) {
-      logger.info(`COURSE-CONTROLLER.SHOW__MODEL-NOT-FOUND-ERROR — ${error}`);
-
-      throw new ModelNotFoundError(Course.getNotFoundMessage());
+      throw new ModelNotFoundError({
+        message: Course.getNotFoundMessage(),
+        file: 'COURSE-CONTROLLER.SHOW',
+        originalError: error,
+        triggeredByUser: req.user.id,
+      });
     }
 
     return res.send(course);
@@ -161,9 +164,12 @@ export class CourseController {
         where: { id: req.params.id, isPrivate: false },
       });
     } catch (error) {
-      logger.info(`COURSE-CONTROLLER.UPDATE__MODEL-NOT-FOUND-ERROR — ${error}`);
-
-      throw new ModelNotFoundError(Course.getNotFoundMessage());
+      throw new ModelNotFoundError({
+        message: Course.getNotFoundMessage(),
+        file: 'COURSE-CONTROLLER.UPDATE',
+        originalError: error,
+        triggeredByUser: req.user.id,
+      });
     }
 
     if (!this.authorization.setUser(req.user).can(course, 'update')) {
@@ -198,9 +204,12 @@ export class CourseController {
     try {
       course = await Course.findOneOrFail(req.params.id);
     } catch (error) {
-      logger.info(`COURSE-CONTROLLER.DELETE__MODEL-NOT-FOUND-ERROR — ${error}`);
-
-      throw new ModelNotFoundError(Course.getNotFoundMessage());
+      throw new ModelNotFoundError({
+        message: Course.getNotFoundMessage(),
+        file: 'COURSE-CONTROLLER.DELETE',
+        originalError: error,
+        triggeredByUser: req.user.id,
+      });
     }
 
     if (!this.authorization.setUser(req.user).can(course, 'delete')) {

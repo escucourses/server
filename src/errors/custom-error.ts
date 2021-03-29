@@ -1,3 +1,10 @@
+export interface ErrorBody {
+  message?: string;
+  file?: string;
+  originalError?: Error;
+  triggeredByUser?: number;
+}
+
 export abstract class CustomError extends Error {
   abstract statusCode: number;
 
