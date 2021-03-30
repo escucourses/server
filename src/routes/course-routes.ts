@@ -6,13 +6,13 @@ import { CourseController } from '../controllers/course-controller';
 import { validateRequest } from '../middlewares/validate-request';
 
 export class CourseRoutes extends BaseRoute<CourseController> {
-  uri = '/courses';
-
   constructor() {
     super(CourseController);
   }
 
   public config(): void {
+    this.uri = '/courses';
+
     this.index();
     this.create();
     this.show();
@@ -21,12 +21,12 @@ export class CourseRoutes extends BaseRoute<CourseController> {
   }
 
   public index() {
-    this.router.get('/', (req, res) => this.controller.index(req, res));
+    this.router.get(this.uri, (req, res) => this.controller.index(req, res));
   }
 
   public create() {
     this.router.post(
-      '/',
+      this.uri,
       this.controller.createValidations,
       validateRequest,
       (req, res) => this.controller.create(req, res)
@@ -35,7 +35,7 @@ export class CourseRoutes extends BaseRoute<CourseController> {
 
   public show() {
     this.router.get(
-      '/:id',
+      `${this.uri}/:id`,
       this.controller.singleResourceValidations,
       validateRequest,
       (req, res) => this.controller.show(req, res)
@@ -44,7 +44,7 @@ export class CourseRoutes extends BaseRoute<CourseController> {
 
   public update() {
     this.router.patch(
-      '/:id',
+      `${this.uri}/:id`,
       this.controller.singleResourceValidations,
       this.controller.updateValidations,
       validateRequest,
@@ -54,7 +54,7 @@ export class CourseRoutes extends BaseRoute<CourseController> {
 
   public delete() {
     this.router.delete(
-      '/:id',
+      `${this.uri}/:id`,
       this.controller.singleResourceValidations,
       validateRequest,
       (req, res) => this.controller.delete(req, res)

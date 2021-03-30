@@ -6,20 +6,20 @@ import { AuthController } from '../controllers/auth-controller';
 import { validateRequest } from '../middlewares/validate-request';
 
 export class AuthRoutes extends BaseRoute<AuthController> {
-  uri = '/auth';
-
   constructor() {
     super(AuthController);
   }
 
   public config(): void {
+    this.uri = '/auth';
+
     this.signup();
     this.signin();
   }
 
   public signup() {
     this.router.post(
-      '/signup',
+      `${this.uri}/signup`,
       this.controller.signupValidations,
       validateRequest,
       (req, res) => this.controller.signup(req, res)
@@ -28,7 +28,7 @@ export class AuthRoutes extends BaseRoute<AuthController> {
 
   public signin() {
     this.router.post(
-      '/signin',
+      `${this.uri}/signin`,
       this.controller.signinValidations,
       validateRequest,
       (req, res) => this.controller.signin(req, res)

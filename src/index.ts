@@ -23,6 +23,7 @@ import { NotFoundError } from './errors/not-found-error';
 import { IndexRoutes } from './routes/index-routes';
 import { AuthRoutes } from './routes/auth-routes';
 import { CourseRoutes } from './routes/course-routes';
+import { SectionRoutes } from './routes/section-routes';
 
 createConnection()
   .then(async (connection) => {
@@ -34,20 +35,22 @@ createConnection()
     const indexRoutes = new IndexRoutes();
     const authRoutes = new AuthRoutes();
     const courseRoutes = new CourseRoutes();
+    const sectionRoutes = new SectionRoutes();
 
     // Before Middlewares
     app.use(helmet());
     app.use(json());
 
     // Not required Authentication routes
-    app.use(indexRoutes.uri, indexRoutes.router);
-    app.use(authRoutes.uri, authRoutes.router);
+    app.use(indexRoutes.router);
+    app.use(authRoutes.router);
 
     // Documentation
     app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDefinition));
 
     // Authentication Required routes
-    app.use(courseRoutes.uri, validateAuthentication, courseRoutes.router);
+    app.use(validateAuthentication, courseRoutes.router);
+    app.use(validateAuthentication, sectionRoutes.router);
 
     app.all('*', () => {
       throw new NotFoundError();
